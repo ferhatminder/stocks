@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.filters.LargeTest
+import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
 import org.junit.Rule
 import org.junit.Test
 
@@ -28,7 +29,5 @@ class End2EndTest {
             composeTestRule.onNodeWithText(stockPrice.price.toString()).assertIsDisplayed()
         }
     }
-
-    data class StockPrice(val code: String, val price: Double)
 
 }
