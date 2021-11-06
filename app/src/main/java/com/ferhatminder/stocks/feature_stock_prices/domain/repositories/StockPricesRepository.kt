@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface StockPricesRepository {
     fun getStockPrices(): Flow<List<StockPrice>>
+    fun unTrackStockPrice(code: String): List<StockPrice>
 }

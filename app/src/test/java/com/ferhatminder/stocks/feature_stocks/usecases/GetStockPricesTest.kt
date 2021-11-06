@@ -1,4 +1,4 @@
-package com.ferhatminder.stocks.feature_stocks
+package com.ferhatminder.stocks.feature_stocks.usecases
 
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
 import com.ferhatminder.stocks.feature_stock_prices.domain.repositories.StockPricesRepository

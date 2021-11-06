@@ -3,6 +3,7 @@ package com.ferhatminder.stocks
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.ferhatminder.stocks.core.DispatcherProvider
@@ -13,6 +14,7 @@ import com.ferhatminder.stocks.feature_stock_prices.presentation.components.Stoc
 import com.ferhatminder.stocks.ui.theme.StocksTheme
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
 
     @Inject
@@ -38,10 +40,14 @@ class MainActivity : ComponentActivity() {
             StocksTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    StockPriceList(viewModel.state)
+                    StockPriceList(
+                        viewModel.state
+                    ) { event -> viewModel.onEvent(event) }
                 }
             }
         }
     }
 }
+
+
 

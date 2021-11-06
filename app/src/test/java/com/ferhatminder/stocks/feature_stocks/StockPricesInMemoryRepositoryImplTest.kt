@@ -31,4 +31,23 @@ class StockPricesInMemoryRepositoryImplTest {
             stockPrices
         )
     }
+
+    @Test
+    fun `should untrack stock price`() = run {
+        val repo = StockPricesInMemoryRepositoryImpl(
+            listOf(
+                StockPrice("GARAN", 9.76),
+                StockPrice("THYAO", 13.26)
+            )
+        )
+
+        val stockPrices = repo.unTrackStockPrice("GARAN")
+
+        Assert.assertEquals(
+            listOf(
+                StockPrice("THYAO", 13.26)
+            ),
+            stockPrices
+        )
+    }
 }

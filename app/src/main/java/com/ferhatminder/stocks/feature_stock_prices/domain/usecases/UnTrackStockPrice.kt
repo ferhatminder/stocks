@@ -5,6 +5,6 @@ import com.ferhatminder.stocks.feature_stock_prices.domain.repositories.StockPri
 
 class UnTrackStockPrice(val stockPricesRepository: StockPricesRepository) {
     operator fun invoke(code: String): List<StockPrice> {
-        throw NotImplementedError()
+        return stockPricesRepository.unTrackStockPrice(code)
     }
 }

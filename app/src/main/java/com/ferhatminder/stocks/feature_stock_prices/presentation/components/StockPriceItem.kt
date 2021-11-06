@@ -1,41 +1,109 @@
 package com.ferhatminder.stocks.feature_stock_prices.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.DismissDirection.EndToStart
+import androidx.compose.material.DismissValue.Default
+import androidx.compose.material.DismissValue.DismissedToStart
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
+import com.ferhatminder.stocks.feature_stock_prices.presentation.StockPricesViewModel
 
+@ExperimentalMaterialApi
 @Composable
-fun StockPriceItem(stockPrice: StockPrice) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = 2.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = stockPrice.code, fontSize = 24.sp)
-            stockPrice.price?.let {
-                Text(text = it.toString(), fontSize = 24.sp)
+fun StockPriceItem(
+    stockPrice: StockPrice,
+    onEvent: (event: StockPricesViewModel.Event) -> Unit
+) {
+    val dismissState = rememberDismissState(
+        initialValue = Default,
+        confirmStateChange = {
+            if (it == DismissedToStart) {
+                onEvent(
+                    StockPricesViewModel.Event.UnTrackStockPriceEvent(
+                        stockPrice.code
+                    )
+                )
+            }
+            it == DismissedToStart
+        }
+    )
+
+    SwipeToDismiss(
+        state = dismissState,
+        directions = setOf(EndToStart),
+        dismissThresholds = { FractionalThreshold(0.4f) },
+        background = {
+            val color by animateColorAsState(
+                when (dismissState.targetValue) {
+                    DismissedToStart -> Color.Red
+                    else -> Color.Transparent
+                }
+            )
+
+            val alignment = Alignment.CenterEnd
+            val icon = Icons.Default.Delete
+
+            val scale by animateFloatAsState(
+                if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+            )
+
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(horizontal = 20.dp),
+                contentAlignment = alignment
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = "Untrack Stock",
+                    modifier = Modifier.scale(scale)
+                )
+            }
+        },
+        dismissContent = {
+            Card(
+                elevation = animateDpAsState(
+                    if (dismissState.dismissDirection != null) 4.dp else 0.dp
+                ).value
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = stockPrice.code, fontSize = 24.sp)
+                    stockPrice.price?.let {
+                        Text(text = it.toString(), fontSize = 24.sp)
+                    }
+                }
             }
         }
-    }
+    )
 }
 
 
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun StockPricePreview() {
-    StockPriceItem(stockPrice = StockPrice("THY", 10.43))
+    StockPriceItem(
+        stockPrice = StockPrice("THY", 10.43)
+    ) {}
 }
