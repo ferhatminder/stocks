@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class StockPricesInMemoryRepositoryImpl(
-    private val stockPrices: List<StockPrice> = emptyList()
+    val stockPrices: List<StockPrice> = emptyList()
 ) : StockPricesRepository {
 
     override fun getStockPrices(): Flow<List<StockPrice>> {

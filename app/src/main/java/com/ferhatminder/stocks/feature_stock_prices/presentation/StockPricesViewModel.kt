@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class StockPricesViewModel(
-    private val getStockPricesUseCase: GetStockPrices,
-    private val unTrackStockPrice: UnTrackStockPrice,
+    val getStockPricesUseCase: GetStockPrices,
+    val unTrackStockPrice: UnTrackStockPrice,
     dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
