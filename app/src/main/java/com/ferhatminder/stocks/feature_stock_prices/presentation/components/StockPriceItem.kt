@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
 import com.ferhatminder.stocks.feature_stock_prices.presentation.StockPricesViewModel
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StockPriceItem(
     stockPrice: StockPrice,
@@ -59,7 +59,7 @@ fun StockPriceItem(
             val icon = Icons.Default.Delete
 
             val scale by animateFloatAsState(
-                if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                if (dismissState.targetValue == Default) 0.75f else 1f
             )
 
             Box(
@@ -99,7 +99,6 @@ fun StockPriceItem(
 }
 
 
-@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun StockPricePreview() {

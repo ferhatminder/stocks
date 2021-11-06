@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -18,7 +17,6 @@ import androidx.lifecycle.MutableLiveData
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
 import com.ferhatminder.stocks.feature_stock_prices.presentation.StockPricesViewModel
 
-@ExperimentalMaterialApi
 @Composable
 fun StockPriceList(
     data: LiveData<StockPricesViewModel.State>,
@@ -40,7 +38,6 @@ fun StockPriceList(
     }
 }
 
-@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun StockPriceListPreview() {
