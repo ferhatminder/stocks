@@ -20,6 +20,11 @@ class End2EndTest {
 
     private lateinit var tabs: List<String>
 
+    private val stockPrices = listOf(
+        StockPrice("GARAN", 9.76),
+        StockPrice("THYAO", 13.26)
+    )
+
     @Before
     fun setup() {
         val res: Resources = getInstrumentation().targetContext.resources
@@ -33,8 +38,15 @@ class End2EndTest {
     fun e2eTest() {
         shouldRenderTabs()
         shouldListStockPrices()
+        shouldRefreshStockPricesPeriodically()
         shouldUnTrackStockPrice()
         shouldNavigateToStocksTab()
+    }
+
+    private fun shouldRefreshStockPricesPeriodically() {
+        composeTestRule.runOnUiThread { Thread.sleep(3100L) }
+        composeTestRule.onNodeWithText(stockPrices[0].price.toString()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(stockPrices[1].price.toString()).assertDoesNotExist()
     }
 
     private fun shouldNavigateToStocksTab() {
@@ -49,10 +61,6 @@ class End2EndTest {
     }
 
     private fun shouldListStockPrices() {
-        val stockPrices = listOf(
-            StockPrice("GARAN", 9.76),
-            StockPrice("THYAO", 13.26)
-        )
         for (stockPrice in stockPrices) {
             composeTestRule.onNodeWithText(stockPrice.code).assertIsDisplayed()
             composeTestRule.onNodeWithText(stockPrice.price.toString()).assertIsDisplayed()
@@ -60,7 +68,7 @@ class End2EndTest {
     }
 
     private fun shouldUnTrackStockPrice() {
-        val unTrackStockPrice = StockPrice("GARAN", 9.76)
+        val unTrackStockPrice = stockPrices[0]
         composeTestRule.onNodeWithText(unTrackStockPrice.code).performGesture { swipeLeft() }
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(unTrackStockPrice.code).assertDoesNotExist()

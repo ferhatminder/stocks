@@ -90,7 +90,7 @@ fun StockPriceItem(
                 ) {
                     Text(text = stockPrice.code, fontSize = 24.sp)
                     stockPrice.price?.let {
-                        Text(text = it.toString(), fontSize = 24.sp)
+                        Text(text = String.format("%.2f", it), fontSize = 24.sp)
                     }
                 }
             }
@@ -103,6 +103,6 @@ fun StockPriceItem(
 @Composable
 fun StockPricePreview() {
     StockPriceItem(
-        stockPrice = StockPrice("THY", 10.43)
+        stockPrice = StockPrice("THYAO", 10.4342)
     ) {}
 }

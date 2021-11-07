@@ -52,13 +52,20 @@ class StockPricesViewModelTest {
     private lateinit var unTrackStockPrice: UnTrackStockPrice
 
     @Test
-    fun `should list initial stock prices`() = runBlocking {
+    fun `should list initial stock prices and update periodically`() = runBlocking {
         given(getStockPricesUseCase.invoke()).willAnswer {
             flow {
                 emit(
                     listOf(
                         StockPrice("GARAN", 9.76),
                         StockPrice("THYAO", 13.26)
+                    )
+                )
+                delay(3000L)
+                emit(
+                    listOf(
+                        StockPrice("GARAN", 9.96),
+                        StockPrice("THYAO", 13.96)
                     )
                 )
             }
@@ -77,12 +84,21 @@ class StockPricesViewModelTest {
             viewModel.state.value!!.list
         )
 
-        delay(200L)
+        delay(100L)
 
         assertEquals(
             listOf(
                 StockPrice("GARAN", 9.76),
                 StockPrice("THYAO", 13.26)
+            ),
+            viewModel.state.value!!.list
+        )
+
+        delay(3100L)
+        assertEquals(
+            listOf(
+                StockPrice("GARAN", 9.96),
+                StockPrice("THYAO", 13.96)
             ),
             viewModel.state.value!!.list
         )
