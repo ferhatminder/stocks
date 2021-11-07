@@ -1,4 +1,4 @@
-package com.ferhatminder.stocks.feature_stocks
+package com.ferhatminder.stocks.feature_stock_prices
 
 import com.ferhatminder.stocks.feature_stock_prices.data.repositories.StockPricesInMemoryRepositoryImpl
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice

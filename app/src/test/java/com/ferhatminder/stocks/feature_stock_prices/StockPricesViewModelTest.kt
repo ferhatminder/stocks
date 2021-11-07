@@ -1,4 +1,4 @@
-package com.ferhatminder.stocks.feature_stocks
+package com.ferhatminder.stocks.feature_stock_prices
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ferhatminder.stocks.core.TestDispatcherProvider
