@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @ExperimentalMaterialApi
 @Singleton
-@Component(modules = [TestAppModule::class, TestRepositoryModule::class, TestUseCaseModule::class])
+@Component(modules = [TestAppModule::class, TestRepositoryModule::class, UseCaseModule::class])
 interface TestApplicationComponent : ApplicationComponent {
     override fun inject(activity: MainActivity)
 }

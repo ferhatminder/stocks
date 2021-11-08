@@ -43,4 +43,28 @@ class StockPricesInMemoryRepositoryImplTest {
             stockPrices
         )
     }
+
+    @Test
+    fun `should update stock prices`() = run {
+        val repo = StockPricesInMemoryRepositoryImpl(initialStockPrices)
+
+        repo.updateStockPrices(listOf("AKSEN", "THYAO"))
+
+        Assert.assertEquals(
+            listOf(
+                StockPrice("AKSEN", null),
+                StockPrice("THYAO", 13.26),
+            ),
+            repo.stockPrices
+        )
+    }
+
+    @Test
+    fun `should get current tracked stock price codes`() = run {
+        val repo = StockPricesInMemoryRepositoryImpl(initialStockPrices)
+        repo.getTrackingStockCodes()
+        Assert.assertEquals(initialStockPrices.map { it.code }, repo.getTrackingStockCodes())
+    }
+
+
 }

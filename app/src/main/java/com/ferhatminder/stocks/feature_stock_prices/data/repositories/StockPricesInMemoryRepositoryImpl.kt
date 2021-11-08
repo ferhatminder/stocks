@@ -19,19 +19,42 @@ class StockPricesInMemoryRepositoryImpl(
             while (currentCoroutineContext().isActive) {
                 emit(stockPrices)
                 updateStockPrices()
+                delay(200L) // Network
                 delay(Constants.STOCK_PRICE_UPDATE_PERIOD)
             }
         }
     }
 
     private fun updateStockPrices() {
-        stockPrices = stockPrices.map { stockPrice ->
+        setStockPricesSorted(stockPrices.map { stockPrice ->
             StockPrice(stockPrice.code, Random.nextDouble(10.0, 20.0))
-        }.toList()
+        })
     }
 
     override fun unTrackStockPrice(code: String): List<StockPrice> {
-        stockPrices = stockPrices.filter { sp -> sp.code != code }
+        setStockPricesSorted(stockPrices.filter { sp -> sp.code != code })
         return stockPrices
+    }
+
+    override fun getTrackingStockCodes(): List<String> {
+        return stockPrices.map { it.code }
+    }
+
+    override fun updateStockPrices(codes: List<String>) {
+        val filtered = stockPrices.filter {
+            codes.contains(it.code)
+        }
+
+        val newAdded = codes.filter { code ->
+            filtered.find { it.code == code } == null
+        }.map {
+            StockPrice(it, null)
+        }
+
+        setStockPricesSorted(filtered + newAdded)
+    }
+
+    private fun setStockPricesSorted(newStockPrices: List<StockPrice>) {
+        stockPrices = newStockPrices.sortedBy { it.code }
     }
 }

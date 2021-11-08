@@ -4,7 +4,9 @@ import com.ferhatminder.stocks.feature_stocks.domain.entities.Stock
 import com.ferhatminder.stocks.feature_stocks.domain.repositories.StockRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetStocks(val stockRepository: StockRepository) {
+class GetStocks(
+    val stockRepository: StockRepository,
+) {
     operator fun invoke(): Flow<List<Stock>> {
         return stockRepository.getStocks()
     }

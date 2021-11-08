@@ -13,10 +13,10 @@ import org.mockito.junit.MockitoJUnitRunner
 class StockInMemoryRepositoryImplTest {
 
     private val stocks = listOf(
-        Stock("AEFES"),
-        Stock("AKSEN"),
-        Stock("GARAN"),
-        Stock("THYAO")
+        Stock("AEFES", false),
+        Stock("AKSEN", false),
+        Stock("GARAN", false),
+        Stock("THYAO", false)
     )
 
     @Test
