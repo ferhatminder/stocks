@@ -41,6 +41,16 @@ class End2EndTest {
         shouldRefreshStockPricesPeriodically()
         shouldUnTrackStockPrice()
         shouldNavigateToStocksTab()
+        shouldListStocks()
+    }
+
+    private fun shouldListStocks() {
+        composeTestRule.onNodeWithText("AEFES").assertDoesNotExist()
+        composeTestRule.runOnUiThread { Thread.sleep(2000L) } // network call
+        composeTestRule.onNodeWithText("AEFES").assertExists()
+        composeTestRule.onNodeWithText("AKSEN").assertExists()
+        composeTestRule.onNodeWithText("GARAN").assertExists()
+        composeTestRule.onNodeWithText("THYAO").assertExists()
     }
 
     private fun shouldRefreshStockPricesPeriodically() {

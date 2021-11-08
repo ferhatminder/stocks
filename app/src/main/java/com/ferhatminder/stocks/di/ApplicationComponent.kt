@@ -1,8 +1,8 @@
 package com.ferhatminder.stocks.di
 
 import com.ferhatminder.stocks.MainActivity
-import com.ferhatminder.stocks.core.DispatcherProvider
-import com.ferhatminder.stocks.core.StandardDispatcherProvider
+import com.ferhatminder.stocks.utils.DispatcherProvider
+import com.ferhatminder.stocks.utils.StandardDispatcherProvider
 import dagger.Component
 import dagger.Module
 import dagger.Provides

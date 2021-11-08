@@ -1,19 +1,20 @@
-package com.ferhatminder.stocks.core
+package com.ferhatminder.stocks.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 
 @ExperimentalCoroutinesApi
-class TestDispatcherProvider : DispatcherProvider {
+class TestDispatcherProvider(private val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
+    DispatcherProvider {
     override val main: CoroutineDispatcher
-        get() = TestCoroutineDispatcher()
+        get() = dispatcher
     override val io: CoroutineDispatcher
-        get() = TestCoroutineDispatcher()
+        get() = dispatcher
     override val default: CoroutineDispatcher
-        get() = TestCoroutineDispatcher()
+        get() = dispatcher
     override val unconfined: CoroutineDispatcher
-        get() = TestCoroutineDispatcher()
+        get() = dispatcher
 }
 
 

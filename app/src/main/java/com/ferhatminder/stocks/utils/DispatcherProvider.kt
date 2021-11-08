@@ -1,4 +1,4 @@
-package com.ferhatminder.stocks.core
+package com.ferhatminder.stocks.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

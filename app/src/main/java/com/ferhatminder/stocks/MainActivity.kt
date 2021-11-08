@@ -13,13 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.ferhatminder.stocks.core.DispatcherProvider
 import com.ferhatminder.stocks.feature_stock_prices.domain.usecases.GetStockPrices
 import com.ferhatminder.stocks.feature_stock_prices.domain.usecases.UnTrackStockPrice
 import com.ferhatminder.stocks.feature_stock_prices.presentation.StockPricesViewModel
 import com.ferhatminder.stocks.feature_stock_prices.presentation.components.StockPriceList
+import com.ferhatminder.stocks.feature_stocks.domain.usecases.GetStocks
+import com.ferhatminder.stocks.feature_stocks.presentation.StocksViewModel
+import com.ferhatminder.stocks.feature_stocks.presentation.components.StockList
 import com.ferhatminder.stocks.ui.theme.StocksTheme
 import com.ferhatminder.stocks.util.TestTags
+import com.ferhatminder.stocks.utils.DispatcherProvider
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +32,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var unTrackStockPrice: UnTrackStockPrice
+
+    @Inject
+    lateinit var getStocks: GetStocks
 
     @Inject
     lateinit var dispatcherProvider: DispatcherProvider
@@ -68,10 +74,16 @@ class MainActivity : ComponentActivity() {
                                 ) { event -> viewModel.onEvent(event) }
                             }
                         } else {
+                            val stocksViewModel = StocksViewModel(
+                                getStocks,
+                                dispatcherProvider
+                            )
                             Column(
                                 Modifier.testTag(TestTags.SCREEN_STOCKS)
                             ) {
-
+                                StockList(
+                                    stocksViewModel.state
+                                )
                             }
                         }
                     }
