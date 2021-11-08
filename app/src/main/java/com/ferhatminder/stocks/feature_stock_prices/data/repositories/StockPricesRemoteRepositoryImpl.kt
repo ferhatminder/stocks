@@ -1,5 +1,6 @@
 package com.ferhatminder.stocks.feature_stock_prices.data.repositories
 
+import com.ferhatminder.stocks.feature_stock_prices.data.data_sources.StockPriceRetrofitService
 import com.ferhatminder.stocks.feature_stock_prices.domain.entities.StockPrice
 import com.ferhatminder.stocks.feature_stock_prices.domain.repositories.StockPricesRepository
 import com.ferhatminder.stocks.util.Constants
@@ -8,27 +9,29 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
-import kotlin.random.Random
 
-class StockPricesInMemoryRepositoryImpl(
+class StockPricesRemoteRepositoryImpl(val remote: StockPriceRetrofitService) :
+    StockPricesRepository {
     var stockPrices: List<StockPrice> = emptyList()
-) : StockPricesRepository {
 
     override fun getStockPrices(): Flow<List<StockPrice>> {
         return flow {
             while (currentCoroutineContext().isActive) {
                 emit(stockPrices)
                 fetchStockPrices()
-                delay(200L) // Network
                 delay(Constants.STOCK_PRICE_UPDATE_PERIOD)
             }
         }
     }
 
-    private fun fetchStockPrices() {
-        setStockPricesSorted(stockPrices.map { stockPrice ->
-            StockPrice(stockPrice.code, Random.nextDouble(10.0, 20.0))
-        })
+    private suspend fun fetchStockPrices() {
+        setStockPricesSorted(
+            remote.getStockPrices(stockPrices.map { it.code })
+                .map {
+                    StockPrice(
+                        it.code, it.price
+                    )
+                })
     }
 
     override fun unTrackStockPrice(code: String): List<StockPrice> {
