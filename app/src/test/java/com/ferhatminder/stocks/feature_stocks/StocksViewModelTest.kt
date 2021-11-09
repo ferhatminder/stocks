@@ -21,7 +21,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.*
+import org.mockito.kotlin.given
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -49,10 +49,9 @@ class StocksViewModelTest {
                 delay(1000L)
                 emit(
                     listOf(
-                        Stock("AEFES", false),
-                        Stock("AKSEN", false),
-                        Stock("GARAN", false),
-                        Stock("THYAO", false)
+                        Stock("AEFES"),
+                        Stock("AKSEN"),
+                        Stock("THYAO")
                     )
                 )
             }
@@ -64,6 +63,7 @@ class StocksViewModelTest {
             TestDispatcherProvider(coroutineRule.dispatcher)
         )
 
+        viewModel.onEvent(StocksViewModel.Event.GetStocks)
         viewModel.state.captureValues {
             advanceTimeBy(1100L) // Network call
             val loadingState = values[0]!!
@@ -76,10 +76,9 @@ class StocksViewModelTest {
             val loadedState = values[1]!!
             assertEquals(
                 listOf(
-                    Stock("AEFES", false),
-                    Stock("AKSEN", false),
-                    Stock("GARAN", false),
-                    Stock("THYAO", false)
+                    Stock("AEFES"),
+                    Stock("AKSEN"),
+                    Stock("THYAO"),
                 ),
                 loadedState.list
             )
@@ -87,80 +86,6 @@ class StocksViewModelTest {
         }
     }
 
-    @Test
-    fun `should save multiple tracking state of stocks correctly`() =
-        coroutineRule.runBlockingTest {
-            given(getStocksUseCase.invoke()).willAnswer {
-                flow {
-                    delay(1000L)
-                    emit(
-                        listOf(
-                            Stock("AEFES", false),
-                            Stock("AKSEN", false),
-                            Stock("GARAN", true),
-                            Stock("THYAO", true)
-                        )
-                    )
-                }
-            }
-
-            doNothing().`when`(updateStockPrices).invoke(any())
-
-            val viewModel = StocksViewModel(
-                getStocksUseCase,
-                startEditing,
-                updateStockPrices,
-                TestDispatcherProvider(coroutineRule.dispatcher)
-            )
-
-            viewModel.state.captureValues {
-                advanceTimeBy(1100L) // Network call
-                val loadingState = values[0]!!
-                assertEquals(
-                    emptyList<StockPrice>(),
-                    loadingState.list
-                )
-                assertEquals(true, loadingState.loading)
-                assertEquals(false, loadingState.isEditable())
-
-                val loadedState = values[1]!!
-                assertEquals(
-                    listOf(
-                        Stock("AEFES", false),
-                        Stock("AKSEN", false),
-                        Stock("GARAN", true),
-                        Stock("THYAO", true)
-                    ),
-                    loadedState.list
-                )
-                assertEquals(false, loadedState.loading)
-                assertEquals(true, loadedState.isEditable())
-
-                viewModel.onEvent(StocksViewModel.Event.StartEditing)
-
-                val editingState = values[2]!!
-                assertEquals(true, editingState.editing)
-
-                viewModel.onEvent(StocksViewModel.Event.SaveEdit)
-
-                val editedState = values[3]!!
-                assertEquals(
-                    listOf(
-                        Stock("AEFES", false),
-                        Stock("AKSEN", true),
-                        Stock("GARAN", false),
-                        Stock("THYAO", true)
-                    ),
-                    editedState.list
-                )
-                assertEquals(false, editedState.loading)
-                assertEquals(true, editedState.isEditable())
-                assertEquals(false, editedState.editing)
-                verify(updateStockPrices, times(1)).invoke(
-                    listOf("AKSEN", "THYAO")
-                )
-        }
-    }
 }
 
 

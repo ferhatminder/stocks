@@ -67,6 +67,7 @@ class StockPricesViewModelTest {
                 TestDispatcherProvider(coroutineRule.dispatcher)
             )
 
+            viewModel.onEvent(StockPricesViewModel.Event.GetStockPrices)
             viewModel.state.captureValues {
                 advanceTimeBy(3200L)
                 assertEquals(
