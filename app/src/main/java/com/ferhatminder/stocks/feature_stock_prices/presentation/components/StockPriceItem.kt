@@ -91,7 +91,7 @@ fun StockPriceItem(
                     Text(text = stockPrice.code, fontSize = 24.sp)
                     stockPrice.price?.let {
                         Text(text = String.format("%.2f", it), fontSize = 24.sp)
-                    }
+                    } ?: CircularProgressIndicator(modifier = Modifier.scale(0.6f))
                 }
             }
         }
