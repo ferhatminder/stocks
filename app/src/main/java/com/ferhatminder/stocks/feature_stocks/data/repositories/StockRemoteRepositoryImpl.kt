@@ -4,14 +4,17 @@ import com.ferhatminder.stocks.feature_stocks.data.data_sources.StockRetrofitSer
 import com.ferhatminder.stocks.feature_stocks.domain.entities.Stock
 import com.ferhatminder.stocks.feature_stocks.domain.repositories.StockRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 
 class StockRemoteRepositoryImpl(val stockRetrofitService: StockRetrofitService) : StockRepository {
     override fun getStocks(): Flow<List<Stock>> {
-        return stockRetrofitService.getAllStocks().map { codes ->
-            codes.map {
-                Stock(it)
-            }
+        return flow {
+            val allStocks = stockRetrofitService
+                .getAllStocks()
+                .map {
+                    Stock(it)
+                }
+            emit(allStocks)
         }
     }
 
